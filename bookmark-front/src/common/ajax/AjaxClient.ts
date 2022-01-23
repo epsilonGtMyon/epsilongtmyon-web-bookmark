@@ -1,0 +1,13 @@
+
+
+
+interface AjaxClient {
+
+
+
+}
+
+
+export {
+  AjaxClient
+}
