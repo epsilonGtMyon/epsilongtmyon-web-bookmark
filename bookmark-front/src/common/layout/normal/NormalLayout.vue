@@ -38,12 +38,14 @@
           </q-item-section>
         </q-item>
 
-        <q-item to="userlist" clickable v-ripple>
-          <q-item-section>
-            <q-item-label>ユーザー一覧</q-item-label>
-            <q-item-label caption>ユーザーの一覧です。</q-item-label>
-          </q-item-section>
-        </q-item>
+        <template v-if="isAdmin">
+          <q-item to="userlist" clickable v-ripple>
+            <q-item-section>
+              <q-item-label>ユーザー一覧</q-item-label>
+              <q-item-label caption>ユーザーの一覧です。</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
 
         <template v-if="false">
           <q-item-label header>Sandbox</q-item-label>
@@ -78,7 +80,8 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, computed } from "vue";
+import { useAuthStore } from "@/common/store/authStore";
 import { useMessageDialog } from "@/common/components/messagedialog/useMessageDialog";
 import { useAjaxClient } from "@/common/ajax/useAjaxClient";
 import { envParam } from "@/common/envParam";
@@ -87,8 +90,10 @@ export default defineComponent({
   name: "NormalLayout",
   setup() {
     const md = useMessageDialog();
+    const authStore = useAuthStore()
     const ajax = useAjaxClient();
     const leftDrawerOpen = ref(false);
+    const isAdmin = computed(() => authStore.isAdmin)
 
     const confirmLogout = async () => {
       const r = await md.confirm("ログアウトしますか?");
@@ -99,6 +104,7 @@ export default defineComponent({
       location.href = envParam.baseUrl
     };
     return {
+      isAdmin,
       leftDrawerOpen,
       confirmLogout,
     };

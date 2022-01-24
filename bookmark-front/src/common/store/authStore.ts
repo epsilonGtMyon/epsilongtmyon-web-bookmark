@@ -15,6 +15,11 @@ const useAuthStore = defineStore("auth", {
       csrfHeaderName: "",
       authorities: [],
     } as AuthState),
+  getters: {
+    isAdmin(state) {
+      return state.authorities.includes("ROLE_ADMIN");
+    },
+  },
   actions: {
     setAuthState(payload: AuthState) {
       this.$patch(payload);
